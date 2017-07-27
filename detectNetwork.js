@@ -24,13 +24,13 @@ var detectNetwork = function(cardNumber) {
   }
 
   var visaLengths = [13, 16, 19];
-  if (cardNumber[0] === '4' && visaLengths.include(cardNumber.lengths)) {
-  	return 'Visa'
+  if (cardNumber[0] === '4' && visaLengths.includes(cardNumber.length)) {
+  	return 'Visa';
   }
 
   var masterCardPrefixes = ['51', '52', '53', '54', '55'];
-  if (cardNumber.length === 16 && masterCardPrefixes.include(start)) {
-  	return 'MasterCard'
+  if (cardNumber.length === 16 && masterCardPrefixes.includes(start)) {
+  	return 'MasterCard';
   }
  
 };

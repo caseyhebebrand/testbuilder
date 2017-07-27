@@ -13,13 +13,13 @@ var detectNetwork = function(cardNumber) {
   // The American Express network always starts with a 34 or 37 and is 15 digits long
 
   // Once you've read this, go ahead and try to implement this function, then return to the console.
-  var start = cardNumber.slice(0, 2);
+  var twoCharPrefix = cardNumber.slice(0, 2);
 
-  if (cardNumber.length === 15 && (start === '34' || start === '37')) {
+  if (cardNumber.length === 15 && (twoCharPrefix === '34' || twoCharPrefix === '37')) {
   	return 'American Express';
   }
 
-  if (cardNumber.length === 14 && (start === '38' || start === '39')) {
+  if (cardNumber.length === 14 && (twoCharPrefix === '38' || twoCharPrefix === '39')) {
   	return 'Diner\'s Club';
   }
 
@@ -29,9 +29,24 @@ var detectNetwork = function(cardNumber) {
   }
 
   var masterCardPrefixes = ['51', '52', '53', '54', '55'];
-  if (cardNumber.length === 16 && masterCardPrefixes.includes(start)) {
+  if (cardNumber.length === 16 && masterCardPrefixes.includes(twoCharPrefix)) {
   	return 'MasterCard';
   }
+
+  var maestroPrefixes = ['5018', '5020', '5038', '6304'];
+  var maestroStart = cardNumber.slice(0, 4);
+  var maestroLengths = [12, 13, 14, 15, 16, 17, 18, 19];
+  if (maestroPrefixes.includes(maestroStart) && maestroLengths.includes(cardNumber.length)) {
+  	return 'Maestro';
+  }
+
+  var sevenCharPrefix = cardNumber.slice(0, 7);
+  var fourCharPrefix = cardNumber.slice(0, 4);
+  var discoverLengths = [13, 16];
+  if (discoverLengths.includes(cardNumber.length) && (sevenCharPrefix === '644-649' || fourCharPrefix === '6011' || twoCharPrefix === '65')) {
+  	return 'Discover';
+  }
+
  
 };
 

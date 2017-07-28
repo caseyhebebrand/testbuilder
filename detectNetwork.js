@@ -40,14 +40,14 @@ var detectNetwork = function(cardNumber) {
   	return 'Maestro';
   }
 
-  var sevenCharPrefix = cardNumber.slice(0, 7);
+  var threeCharPrefix = cardNumber.slice(0, 3);
   var fourCharPrefix = cardNumber.slice(0, 4);
-  var discoverLengths = [13, 16];
-  if (discoverLengths.includes(cardNumber.length) && (sevenCharPrefix === '644-649' || fourCharPrefix === '6011' || twoCharPrefix === '65')) {
+  var discoverLengths = [16, 19];
+  var discoverPrefixes = ['65', '644', '645', '646', '647', '648', '649', '6011'];
+  if (discoverLengths.includes(cardNumber.length) && (discoverPrefixes.includes(threeCharPrefix)|| discoverPrefixes.includes(fourCharPrefix) || discoverPrefixes.includes(twoCharPrefix))) {
   	return 'Discover';
   }
 
- 
 };
 
 

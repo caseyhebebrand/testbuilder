@@ -24,7 +24,8 @@ var detectNetwork = function(cardNumber) {
   }
 
   var visaLengths = [13, 16, 19];
-  if (cardNumber[0] === '4' && visaLengths.includes(cardNumber.length)) {
+  var switchFour = ['4903', '4905', '4911', '4936', '6333', '6759'];
+  if (cardNumber[0] === '4' && visaLengths.includes(cardNumber.length) && !switchFour.includes(cardNumber.slice(0, 4))) {
   	return 'Visa';
   }
 
@@ -48,6 +49,26 @@ var detectNetwork = function(cardNumber) {
   	return 'Discover';
   }
 
+  //China UnionPay
+  var sixDigit = [];
+  for (var i = 622126; i <= 622925; i++) {
+  	sixDigit.push(i.toString());
+  }
+  var threeDigit = ['624', '625', '626'];
+  var fourDigit = ['6282', '6283', '6284', '6285', '6286', '6287', '6288'];
+  var chinaUnionLengths = [16, 17, 18, 19];
+
+  if (chinaUnionLengths.includes(cardNumber.length) && (sixDigit.includes(cardNumber.slice(0, 6)) || fourDigit.includes(fourCharPrefix)) || threeDigit.includes(threeCharPrefix)) {
+  	return 'China UnionPay';
+  }
+
+  //Switch
+  var switchSix = ['564182', '633110'];
+  var switchLengths = [16, 18, 19];
+
+  if (switchLengths.includes(cardNumber.length) && (switchFour.includes(fourCharPrefix) || switchSix.includes(cardNumber.slice(0, 6)))) {
+  	return 'Switch';
+  }
 };
 
 

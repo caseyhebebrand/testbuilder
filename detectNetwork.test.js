@@ -137,73 +137,31 @@ describe('MasterCard', function() {
   });
  
 });
+ 
 
 describe('Discover', function() {
   // Tests without a function will be marked as "pending" and not run
   // Implement these tests (and others) and make them pass!
   var expect = chai.expect;
-  it('has a prefix of 6011 and a length of 16', function() {
-    expect(detectNetwork('6011567890123456')).to.equal('Discover');
-  });
+  let discoverPrefixes = ['6011', '644', '645', '646', '647', '648', '649', '65'];
+  let discoverLengths = [16, 19];
+  
+  var checkCardNumber = function(length, prefix) {
+    let cardNum = prefix;
+    (function(length) {
+      for (var char = length - prefix.length; char > 0; char --) {
+        cardNum += (char % 10).toString();
+      }
+      it(`has a prefix of ${prefix} and a length of ${length} (card number is ${cardNum})`, function() {
+          expect(detectNetwork(cardNum)).to.equal('Discover')
+        });
+    })(length);
+  };
 
-  it('has a prefix of 6011 and a length of 19', function() {
-    expect(detectNetwork('6011567890123456789')).to.equal('Discover');
-  });
-
-  it('has a prefix of 644 and a length of 16', function() {
-    expect(detectNetwork('6444567890123456')).to.equal('Discover');
-  });
-
-  it('has a prefix of 644 and a length of 19', function() {
-    expect(detectNetwork('6444567890123456789')).to.equal('Discover');
-  });
-
-  it('has a prefix of 645 and a length of 16', function() {
-    expect(detectNetwork('6454567890123456')).to.equal('Discover');
-  });
-
-  it('has a prefix of 645 and a length of 19', function() {
-    expect(detectNetwork('6454567890123456789')).to.equal('Discover');
-  });
-
-  it('has a prefix of 646 and a length of 16', function() {
-    expect(detectNetwork('6464567890123456')).to.equal('Discover');
-  });
-
-  it('has a prefix of 646 and a length of 19', function() {
-    expect(detectNetwork('6464567890123456789')).to.equal('Discover');
-  });
-
-  it('has a prefix of 647 and a length of 16', function() {
-    expect(detectNetwork('6474567890123456')).to.equal('Discover');
-  });
-
-  it('has a prefix of 647 and a length of 19', function() {
-    expect(detectNetwork('6474567890123456789')).to.equal('Discover');
-  });
-
-  it('has a prefix of 648 and a length of 16', function() {
-    expect(detectNetwork('6484567890123456')).to.equal('Discover');
-  });
-
-  it('has a prefix of 648 and a length of 19', function() {
-    expect(detectNetwork('6484567890123456789')).to.equal('Discover');
-  });
-
-  it('has a prefix of 649 and a length of 16', function() {
-    expect(detectNetwork('6494567890123456')).to.equal('Discover');
-  });
-
-  it('has a prefix of 649 and a length of 19', function() {
-    expect(detectNetwork('6494567890123456789')).to.equal('Discover');
-  });
-
-  it('has a prefix of 65 and a length of 16', function() {
-    expect(detectNetwork('6534567890123456')).to.equal('Discover');
-  });
-
-  it('has a prefix of 65 and a length of 19', function() {
-    expect(detectNetwork('6534567890123456789')).to.equal('Discover');
+  discoverPrefixes.forEach(function(prefix) {
+    discoverLengths.forEach(function(length) {
+      checkCardNumber(length, prefix);
+    });
   });
 });
 
@@ -239,7 +197,7 @@ describe('China UnionPay', function() {
   let lowPrefix3 = 6282;
   let highPrefix3 = 6288;
 
-  var checkCardNumber = function(lowPrefix, highPrefix, len) {
+  var checkCardNumberWithRange = function(lowPrefix, highPrefix, len) {
     for (let prefix = lowPrefix; prefix <= highPrefix; prefix ++) {
       (function(prefix) {
         var cardNum = prefix.toString();
@@ -257,9 +215,9 @@ describe('China UnionPay', function() {
   }
 
   chinaLengths.forEach(function(len) {
-    checkCardNumber(lowPrefix1, highPrefix1, len);
-    checkCardNumber(lowPrefix2, highPrefix2, len);
-    checkCardNumber(lowPrefix3, highPrefix3, len);
+    checkCardNumberWithRange(lowPrefix1, highPrefix1, len);
+    checkCardNumberWithRange(lowPrefix2, highPrefix2, len);
+    checkCardNumberWithRange(lowPrefix3, highPrefix3, len);
   });
 });
 
@@ -268,6 +226,7 @@ describe('Switch', function() {
   let expect = chai.expect;
   let switchPrefixes = ['4903', '4905', '4911', '4936', '564182', '633110', '6333', '6759'];
   let switchLengths = [16, 18, 19];
+  
   var checkCardNumber = function(length, prefix) {
     let cardNum = prefix;
     (function(length) {

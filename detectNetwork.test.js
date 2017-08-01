@@ -229,5 +229,61 @@ describe('Maestro', function() {
   });
 });
 
-describe('should support China UnionPay')
-describe('should support Switch')
+describe('China UnionPay', function() {
+  let expect = chai.expect;
+  let chinaLengths = [16, 17, 18, 19];
+  let lowPrefix1 = 622126;
+  let highPrefix1 = 622925;
+  let lowPrefix2 = 624;
+  let highPrefix2 = 626;
+  let lowPrefix3 = 6282;
+  let highPrefix3 = 6288;
+
+  var checkCardNumber = function(lowPrefix, highPrefix, len) {
+    for (let prefix = lowPrefix; prefix <= highPrefix; prefix ++) {
+      (function(prefix) {
+        var cardNum = prefix.toString();
+        var cardLength = cardNum.length;
+        for (var strLength = len - cardLength; strLength > 0; strLength --) {
+          cardNum += (strLength % 10).toString();
+        }
+
+        it(`has a prefix of ${prefix} and a length of ${len} (card number is ${cardNum})`, function() {
+          expect(detectNetwork(cardNum)).to.equal('China UnionPay')
+        });
+
+      })(prefix);
+    }
+  }
+
+  chinaLengths.forEach(function(len) {
+    checkCardNumber(lowPrefix1, highPrefix1, len);
+    checkCardNumber(lowPrefix2, highPrefix2, len);
+    checkCardNumber(lowPrefix3, highPrefix3, len);
+  });
+});
+
+//describe('should support Switch')
+describe('Switch', function() {
+  let expect = chai.expect;
+  let switchPrefixes = ['4903', '4905', '4911', '4936', '564182', '633110', '6333', '6759'];
+  let switchLengths = [16, 18, 19];
+  var checkCardNumber = function(length, prefix) {
+    let cardNum = prefix;
+    (function(length) {
+      for (var char = length - prefix.length; char > 0; char --) {
+        cardNum += (char % 10).toString();
+      }
+
+      it(`has a prefix of ${prefix} and a length of ${length} (card number is ${cardNum})`, function() {
+          expect(detectNetwork(cardNum)).to.equal('Switch')
+        });
+    })(length);
+  };
+
+  switchPrefixes.forEach(function(prefix) {
+    switchLengths.forEach(function(length) {
+      checkCardNumber(length, prefix);
+    });
+  });
+});

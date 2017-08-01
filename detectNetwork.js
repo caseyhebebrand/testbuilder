@@ -14,26 +14,33 @@ var detectNetwork = function(cardNumber) {
 
   // Once you've read this, go ahead and try to implement this function, then return to the console.
   var twoCharPrefix = cardNumber.slice(0, 2);
+  var threeCharPrefix = cardNumber.slice(0, 3);
+  var fourCharPrefix = cardNumber.slice(0, 4);
 
+  //American Express
   if (cardNumber.length === 15 && (twoCharPrefix === '34' || twoCharPrefix === '37')) {
   	return 'American Express';
   }
 
+  //Diner's Club
   if (cardNumber.length === 14 && (twoCharPrefix === '38' || twoCharPrefix === '39')) {
   	return 'Diner\'s Club';
   }
 
+  //Visa
   var visaLengths = [13, 16, 19];
   var switchFour = ['4903', '4905', '4911', '4936', '6333', '6759'];
   if (cardNumber[0] === '4' && visaLengths.includes(cardNumber.length) && !switchFour.includes(cardNumber.slice(0, 4))) {
   	return 'Visa';
   }
 
+  //Mastercard
   var masterCardPrefixes = ['51', '52', '53', '54', '55'];
   if (cardNumber.length === 16 && masterCardPrefixes.includes(twoCharPrefix)) {
   	return 'MasterCard';
   }
 
+  //Maestro
   var maestroPrefixes = ['5018', '5020', '5038', '6304'];
   var maestroStart = cardNumber.slice(0, 4);
   var maestroLengths = [12, 13, 14, 15, 16, 17, 18, 19];
@@ -41,8 +48,7 @@ var detectNetwork = function(cardNumber) {
   	return 'Maestro';
   }
 
-  var threeCharPrefix = cardNumber.slice(0, 3);
-  var fourCharPrefix = cardNumber.slice(0, 4);
+  //Discover
   var discoverLengths = [16, 19];
   var discoverPrefixes = ['65', '644', '645', '646', '647', '648', '649', '6011'];
   if (discoverLengths.includes(cardNumber.length) && (discoverPrefixes.includes(threeCharPrefix)|| discoverPrefixes.includes(fourCharPrefix) || discoverPrefixes.includes(twoCharPrefix))) {
